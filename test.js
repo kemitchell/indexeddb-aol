@@ -1,10 +1,10 @@
 var tape = require('tape')
-var indexeddbAOL = require('./')
+var IndexeddbAOL = require('./')
 
 var db
 tape('initialize', function (t) {
   t.doesNotThrow(function () {
-    db = new indexeddbAOL({name: 'test'})
+    db = new IndexeddbAOL({name: 'test'})
   }, 'initializer does not throw')
   t.end()
 })
