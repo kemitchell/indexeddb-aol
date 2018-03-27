@@ -1,0 +1,14 @@
+{
+  "name": "indexeddb-aol",
+  "version": "0.0.0",
+  "description": "store an append-only log in IndexedDB",
+  "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
+  "repository": "kemitchell/indexeddb-aol.js",
+  "devDependencies": {
+    "browserify": "^16.1.1",
+    "tape": "^4.8.0"
+  },
+  "scripts": {
+    "pretest": "browserify test.js > test.browser.js"
+  }
+}

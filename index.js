@@ -122,7 +122,7 @@ IndexedDBAOL.prototype.iterate = function (from, iterator, callback) {
     transaction.onerror = function () {
       callback(transaction.error)
     }
-    var range = IDBKeyRange.lowerBound(from)
+    var range = IDBKeyRange.lowerBound(encodeIndex(from))
     var request = objectStore.openCursor(range)
     request.onsuccess = function () {
       var cursor = request.result
