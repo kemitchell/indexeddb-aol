@@ -4,11 +4,19 @@ module.exports = IndexedDBAOL
 
 function IndexedDBAOL (options) {
   if (!(this instanceof IndexedDBAOL)) return new IndexedDBAOL(options)
+
+  // Option Validation
   assert.equal(typeof options.name, 'string')
+
+  // Name
   assert(options.name.length > 0)
   this._name = options.name
+
+  // Version
   this._version = options.version || 1
   assert(this._version < LIBRARY_VERSION_MULTIPLIER)
+
+  // Index Options
   this._indexOptions = options.indexes || []
   assert(Array.isArray(this._indexOptions))
   assert(this._indexOptions.every(function (index) {
@@ -26,6 +34,8 @@ function IndexedDBAOL (options) {
       })
     )
   }))
+
+  // IndexedDB API Objects
   this._IndexedDB = (
     options.IndexedDB ||
     window.indexedDB ||
@@ -40,6 +50,8 @@ function IndexedDBAOL (options) {
     window.webkitIDBKeyRange ||
     window.msIDBKeyRange
   )
+
+  // Initialization
   this._database = null
 }
 
