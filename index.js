@@ -3,7 +3,9 @@ var assert = require('assert')
 module.exports = IndexedDBAOL
 
 function IndexedDBAOL (options) {
-  if (!(this instanceof IndexedDBAOL)) return new IndexedDBAOL(options)
+  if (!(this instanceof IndexedDBAOL)) {
+    return new IndexedDBAOL(options)
+  }
 
   // Option Validation
   assert.equal(typeof options.name, 'string')
