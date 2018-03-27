@@ -103,9 +103,9 @@ IndexedDBAOL.prototype._calculateVersion = function () {
 IndexedDBAOL.prototype._initialize = function upgrade (callback) {
   var self = this
   var version = this._calculateVersion()
-  var request = self._IndexedDB.open(self._name, version)
-  request.onupgradeneeded = function (event) {
-    var database = request.result
+  var openRequest = self._IndexedDB.open(self._name, version)
+  openRequest.onupgradeneeded = function (event) {
+    var database = openRequest.result
     database.onerror = function () {
       callback(database.error)
     }
@@ -119,11 +119,11 @@ IndexedDBAOL.prototype._initialize = function upgrade (callback) {
       objectStore.createIndex(options.name, options.keyPath, flags)
     })
   }
-  request.onerror = function () {
-    callback(request.error)
+  openRequest.onerror = function () {
+    callback(openRequest.error)
   }
-  request.onsuccess = function () {
-    self._database = request.result
+  openRequest.onsuccess = function () {
+    self._database = openRequest.result
     callback()
   }
 }
@@ -202,9 +202,9 @@ IndexedDBAOL.prototype.iterate = function (from, iterator, callback) {
       callback(transaction.error)
     }
     var range = IDBKeyRange.lowerBound(encodeIndex(from))
-    var request = objectStore.openCursor(range)
-    request.onsuccess = function () {
-      var cursor = request.result
+    var cursorRequest = objectStore.openCursor(range)
+    cursorRequest.onsuccess = function () {
+      var cursor = cursorRequest.result
       if (cursor) {
         iterator(decodeIndex(cursor.key), cursor.value, function (error) {
           if (error) return callback(error)
@@ -219,11 +219,11 @@ IndexedDBAOL.prototype.iterate = function (from, iterator, callback) {
 
 IndexedDBAOL.prototype.destroy = function (callback) {
   var self = this
-  var request = self._IndexedDB.deleteDatabase(self._name)
-  request.onerror = function () {
-    callback(request.error)
+  var destroyRequest = self._IndexedDB.deleteDatabase(self._name)
+  destroyRequest.onerror = function () {
+    callback(destroyRequest.error)
   }
-  request.onsuccess = function () {
+  destroyRequest.onsuccess = function () {
     self._database = null
     callback()
   }
