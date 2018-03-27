@@ -9,7 +9,23 @@ function IndexedDBAOL (options) {
   this._name = options.name
   this._version = options.version || 1
   assert(this._version < LIBRARY_VERSION_MULTIPLIER)
-  // TODO: options.indexes
+  this._indexOptions = options.indexes || []
+  assert(Array.isArray(this._indexOptions))
+  assert(this._indexOptions.every(function (index) {
+    return (
+      typeof index === 'object' &&
+      // Name
+      index.hasOwnProperty('name') &&
+      typeof index.name === 'string' &&
+      index.name.length !== 0 &&
+      // Key Path
+      index.hasOwnProperty('keyPath') &&
+      Array.isArray(index.keyPath) &&
+      index.keyPath.every(function (element) {
+        return typeof element === 'string' && element.length !== 0
+      })
+    )
+  }))
   this._IndexedDB = (
     options.IndexedDB ||
     window.indexedDB ||
@@ -80,8 +96,14 @@ IndexedDBAOL.prototype._initialize = function upgrade (callback) {
       callback(database.error)
     }
     if (event.oldVersion < version) {
-      database.createObjectStore(ENTRIES)
+      var objectStore = database.createObjectStore(ENTRIES)
     }
+    self._indexOptions.forEach(function (options) {
+      var flags = {}
+      if (options.multiEntry) flags.multiEntry = true
+      if (options.unique) flags.unique = true
+      objectStore.createIndex(options.name, options.keyPath, flags)
+    })
   }
   request.onerror = function () {
     callback(request.error)
