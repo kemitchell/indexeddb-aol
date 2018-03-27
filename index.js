@@ -7,6 +7,8 @@ function IndexedDBAOL (options) {
   assert.equal(typeof options.name, 'string')
   assert(options.name.length > 0)
   this._name = options.name
+  this._version = options.version || 1
+  assert(this._version < LIBRARY_VERSION_MULTIPLIER)
   // TODO: options.indexes
   this._IndexedDB = (
     options.IndexedDB ||
@@ -26,17 +28,58 @@ function IndexedDBAOL (options) {
 }
 
 var ENTRIES = 'entries'
-var CURRENT_VERSION = 1
+
+// IndexedDB Versions
+//
+// This library may need to update the IndexedDB schema for
+// entries at some point in the future. Users may also need
+// to update the IndexedDB schema, as they change indexes.
+//
+// IndexedDB gives us just one version number to work
+// with. So we use a composite version number that encodes
+// both the library schema version and the schema version
+// provided by the user.
+//
+// Any library schema update should trigger
+// `onupgradeneeded`. A user schema update should also
+// trigger `onupgradeneeded`, even if the library schema is
+// the same.
+//
+// The solution below composes a single version number by:
+//
+// 1. multiplying the library schema number by a very large
+//    power of ten, effectively shifting the library schema
+//    number to left
+//
+// 2. adding the user schema number, filling in digits left
+//    empty on the right
+
+var CURRENT_LIBRARY_VERSION = 1
+var LIBRARY_VERSION_MULTIPLIER = Math.pow(
+  10,
+  Number.MAX_SAFE_INTEGER.toString().length - 4
+)
+
+IndexedDBAOL.prototype._calculateVersion = function () {
+  if (!this._calculatedVersion) {
+    this._calculatedVersion = (
+      (LIBRARY_VERSION_MULTIPLIER * CURRENT_LIBRARY_VERSION) +
+      this._version
+    )
+  }
+  return this._calculatedVersion
+}
 
 IndexedDBAOL.prototype._initialize = function upgrade (callback) {
   var self = this
-  var request = self._IndexedDB.open(self._name, CURRENT_VERSION)
+  var version = this._calculateVersion()
+  var request = self._IndexedDB.open(self._name, version)
   request.onupgradeneeded = function (event) {
     var database = request.result
     database.onerror = function () {
       callback(database.error)
     }
-    if (event.oldVersion < CURRENT_VERSION) {
+    if (event.oldVersion < version) {
       database.createObjectStore(ENTRIES)
     }
   }
