@@ -1,6 +1,6 @@
 {
   "name": "indexeddb-aol",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "store an append-only log in IndexedDB",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "repository": "kemitchell/indexeddb-aol.js",
