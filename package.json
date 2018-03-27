@@ -4,6 +4,7 @@
   "description": "store an append-only log in IndexedDB",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "repository": "kemitchell/indexeddb-aol.js",
+  "homepage": "https://github.com/kemitchell/indexeddb-aol.js",
   "devDependencies": {
     "browserify": "^16.1.1",
     "tape": "^4.8.0"
