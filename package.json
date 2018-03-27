@@ -11,5 +11,21 @@
   },
   "scripts": {
     "pretest": "browserify test.js > test.browser.js"
-  }
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "licensezero": [
+    {
+      "license": {
+        "jurisdiction": "US-CA",
+        "name": "Kyle E. Mitchell",
+        "projectID": "2442f092-3bb6-410d-8773-c6645e5df3a3",
+        "publicKey": "1589d5a1b9b6b6ca26515b65fe9f725410c9f7fa41bcd9954a84d76f47cc6482",
+        "terms": "reciprocal",
+        "version": "2.0.1",
+        "homepage": "https://github.com/kemitchell/indexeddb-aol.js"
+      },
+      "licensorSignature": "d3017a4264a52ba818e0bd32ba2bb30232cc70300ab0238159d5e0bbcc87b6e46179fbcb62786132be0035d97a0d3aa7dd3cc505844cf7fc7180187aedc6cb0d",
+      "agentSignature": "ec78141f0dd34b0993ae2c9805915f17824a8cb2eb6ea5d4f15e203504441e1e1d2349cd0bf99914d9e930830f69c61a31f322c18b02d450f64cd7fd3d94f908"
+    }
+  ]
 }
